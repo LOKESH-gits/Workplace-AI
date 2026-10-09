@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Workplace AI — Livelihood Intelligence &amp; Trust Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#F6F5F1;
+  --surface:#FFFFFF;
+  --surface-2:#EFEDE6;
+  --ink:#12201D;
+  --ink-soft:#5B665F;
+  --ink-faint:#8B958E;
+  --border:#E2DFD3;
+  --teal-900:#0B332D;
+  --teal-800:#0F433B;
+  --teal-700:#15574C;
+  --teal-600:#1B6E5F;
+  --teal-500:#218774;
+  --teal-100:#DCEEE8;
+  --gold-600:#9C7A24;
+  --gold-500:#C79A34;
+  --gold-100:#F5E9CB;
+  --coral-600:#B54A2E;
+  --coral-500:#D8613C;
+  --coral-100:#F7E2D7;
+  --sky-500:#3E77A6;
+  --sky-100:#DDEAF3;
+  --radius-sm:6px;
+  --radius-md:12px;
+  --radius-lg:20px;
+  --shadow-1: 0 1px 2px rgba(18,32,29,0.06), 0 1px 1px rgba(18,32,29,0.04);
+  --shadow-2: 0 8px 24px -8px rgba(18,32,29,0.18);
+  color-scheme: light;
+}
+:root:not([data-theme="light"]) { }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1613;
+    --surface:#16211D;
+    --surface-2:#1C2925;
+    --ink:#EDF2EF;
+    --ink-soft:#AAB6AF;
+    --ink-faint:#748079;
+    --border:#293833;
+    --teal-100:#173A32;
+    --gold-100:#3A2E12;
+    --coral-100:#3A2216;
+    --sky-100:#152C3A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1613;
+  --surface:#16211D;
+  --surface-2:#1C2925;
+  --ink:#EDF2EF;
+  --ink-soft:#AAB6AF;
+  --ink-faint:#748079;
+  --border:#293833;
+  --teal-100:#173A32;
+  --gold-100:#3A2E12;
+  --coral-100:#3A2216;
+  --sky-100:#152C3A;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif; letter-spacing:-0.01em;}
+.mono{font-family:'JetBrains Mono',monospace;}
+::selection{background:var(--gold-100); color:var(--teal-900);}
+a{color:inherit;}
+button{font-family:inherit; cursor:pointer;}
+.scrollx{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.scrollx::-webkit-scrollbar{height:6px;}
+.scrollx::-webkit-scrollbar-thumb{background:var(--border); border-radius:99px;}
+
+/* ---- layout shells ---- */
+#app{min-height:100%;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px;}
+.wrap-narrow{max-width:760px; margin:0 auto; padding:0 20px;}
+
+/* ---- topbar ---- */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.topbar-inner{display:flex; align-items:center; justify-content:space-between; height:64px; gap:12px;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:17px;}
+.brand .mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,var(--teal-600),var(--teal-900)); display:flex;align-items:center;justify-content:center; color:var(--gold-100); font-family:'Fraunces',serif; font-weight:600; font-size:16px; flex:none;}
+.demo-banner{background:var(--gold-500); color:#231A03; font-size:12.5px; font-weight:700; text-align:center; padding:6px 10px; letter-spacing:0.01em;}
+
+/* ---- buttons ---- */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:99px; padding:11px 20px; font-weight:600; font-size:14.5px; border:1px solid transparent; transition:transform .12s ease, background .15s ease; white-space:nowrap;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--teal-800); color:#F3FAF7;}
+.btn-primary:hover{background:var(--teal-900);}
+.btn-gold{background:var(--gold-500); color:#231A03;}
+.btn-gold:hover{background:var(--gold-600); color:#fff;}
+.btn-outline{background:transparent; border-color:var(--border); color:var(--ink);}
+.btn-outline:hover{border-color:var(--ink-faint);}
+.btn-ghost{background:transparent; color:var(--ink-soft); padding:8px 12px;}
+.btn-ghost:hover{color:var(--ink);}
+.btn-sm{padding:7px 14px; font-size:13px;}
+.btn-block{width:100%;}
+.btn-coral{background:var(--coral-600); color:#fff;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+
+/* ---- cards ---- */
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-1);}
+.card-pad{padding:20px;}
+.section-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint);}
+.eyebrow{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--teal-700); background:var(--teal-100); padding:5px 11px; border-radius:99px;}
+
+/* ---- status pills ---- */
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; padding:4px 10px; border-radius:99px;}
+.pill-verified{background:var(--teal-100); color:var(--teal-800);}
+.pill-assessed{background:var(--gold-100); color:var(--gold-600);}
+.pill-claimed{background:var(--surface-2); color:var(--ink-soft);}
+.pill-warn{background:var(--coral-100); color:var(--coral-600);}
+.pill-info{background:var(--sky-100); color:var(--sky-500);}
+
+/* ---- skill dot ---- */
+.dot{width:11px;height:11px;border-radius:50%; flex:none; border:2px solid transparent;}
+.dot-verified{background:var(--teal-600);}
+.dot-assessed{background:var(--gold-500);}
+.dot-claimed{background:transparent; border-color:var(--ink-faint);}
+
+/* ---- modal ---- */
+.modal-backdrop{position:fixed; inset:0; background:rgba(11,20,18,0.55); z-index:80; display:flex; align-items:flex-end; justify-content:center; padding:0;}
+@media(min-width:720px){.modal-backdrop{align-items:center; padding:24px;}}
+.modal-panel{background:var(--bg); width:100%; max-width:640px; max-height:92vh; overflow-y:auto; border-radius:20px 20px 0 0; box-shadow:var(--shadow-2); animation:slideup .28s cubic-bezier(.2,.9,.3,1);}
+@media(min-width:720px){.modal-panel{border-radius:20px; max-height:88vh;}}
+@keyframes slideup{from{transform:translateY(24px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+.modal-head{position:sticky; top:0; background:var(--bg); z-index:5; display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid var(--border);}
+
+/* ---- progress ---- */
+.progress-track{width:100%; height:8px; background:var(--surface-2); border-radius:99px; overflow:hidden;}
+.progress-fill{height:100%; background:linear-gradient(90deg,var(--teal-600),var(--teal-500)); border-radius:99px; transition:width .5s ease;}
+
+/* ---- lifecycle rail ---- */
+.rail{display:flex; align-items:center; gap:0; margin:6px 0 4px;}
+.rail-step{width:24px;height:24px;border-radius:50%; background:var(--surface-2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--ink-faint); flex:none; transition:all .25s ease;}
+.rail-step.done{background:var(--teal-700); border-color:var(--teal-700); color:#fff;}
+.rail-step.active{background:var(--gold-500); border-color:var(--gold-500); color:#231A03; box-shadow:0 0 0 4px var(--gold-100);}
+.rail-line{flex:1; height:2px; background:var(--border); min-width:8px;}
+.rail-line.done{background:var(--teal-600);}
+
+/* ---- nav ---- */
+.tabbar{display:flex; gap:6px; overflow-x:auto; padding:4px 0 2px;}
+.tabbar::-webkit-scrollbar{display:none;}
+.tab{padding:8px 16px; border-radius:99px; font-size:13.5px; font-weight:600; color:var(--ink-soft); border:1px solid var(--border); background:var(--surface); white-space:nowrap; flex:none;}
+.tab.active{background:var(--teal-800); color:#fff; border-color:var(--teal-800);}
+
+/* ---- misc ---- */
+.fade-in{animation:fadein .35s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.divider{height:1px; background:var(--border); margin:16px 0;}
+.avatar{width:52px;height:52px;border-radius:14px; background:linear-gradient(155deg,var(--teal-600),var(--teal-900)); display:flex; align-items:center; justify-content:center; color:var(--gold-100); font-weight:700; font-size:18px; flex:none; font-family:'Fraunces',serif;}
+.toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--teal-900); color:#fff; padding:13px 20px; border-radius:99px; font-size:14px; font-weight:600; z-index:200; box-shadow:var(--shadow-2); display:flex; align-items:center; gap:8px; animation:toastin .25s ease;}
+@keyframes toastin{from{opacity:0; transform:translate(-50%,10px);} to{opacity:1; transform:translate(-50%,0);}}
+.grid-auto{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
+.kpi{padding:16px; border-radius:14px; background:var(--surface); border:1px solid var(--border);}
+.kpi .num{font-family:'Fraunces',serif; font-size:26px; font-weight:600;}
+.skillnode{border:1px solid var(--border); border-radius:12px; padding:12px 14px; background:var(--surface); display:flex; align-items:center; gap:10px; cursor:pointer; transition:border-color .15s;}
+.skillnode:hover{border-color:var(--teal-500);}
+.chip{font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:99px;}
+.map-wrap{position:relative; background:radial-gradient(circle at 30% 20%, var(--teal-100), var(--surface-2)); border-radius:16px; height:260px; overflow:hidden; border:1px solid var(--border);}
+.map-dot{position:absolute; width:10px; height:10px; border-radius:50%; background:var(--sky-500);}
+.map-worker{position:absolute; width:14px; height:14px; border-radius:50%; background:var(--teal-600); border:2px solid #fff; box-shadow:0 0 0 3px var(--teal-100);}
+.map-hub{position:absolute; font-size:20px;}
+.link-btn{background:none;border:none;color:var(--teal-700); font-weight:600; font-size:13.5px; padding:0;}
+.badge-count{background:var(--coral-600); color:#fff; font-size:10.5px; font-weight:700; border-radius:99px; padding:1px 6px; min-width:16px; text-align:center;}
+input[type=radio]{accent-color:var(--teal-700);}
+.mcq-opt{display:flex; gap:10px; align-items:flex-start; border:1px solid var(--border); border-radius:10px; padding:11px 13px; margin-bottom:8px; cursor:pointer;}
+.mcq-opt.picked{border-color:var(--teal-600); background:var(--teal-100);}
+.mcq-opt.correct{border-color:var(--teal-600); background:var(--teal-100);}
+.mcq-opt.wrong{border-color:var(--coral-500); background:var(--coral-100);}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast-root"></div>
+
+<script>
+/* =========================================================================
+   WORKPLACE AI — demo-ready interactive prototype
+   Single-file, client-only. All "backend" behaviour is simulated in JS
+   state so every button genuinely changes something and the golden demo
+   path (voice -> skillgraph -> passport -> opportunity -> match -> pay ->
+   proof -> mobility -> mission) actually runs end to end.
+   ========================================================================= */
+
+const ICONS = {
+  verified: '✓', assessed: '◐', claimed: '○'
+};
+
+function freshData(){
+  return {
+    worker: {
+      name:'Arun Kumar',
+      title:'Rural Electrical & Pump Technician',
+      language:'Tamil',
+      experience:'5 Years',
+      location:'Demo Rural Block',
+      radius:15,
+      availability:'Available',
+      skills:{
+        'Electrical Wiring':'verified',
+        'Fan Installation':'verified',
+        'Pump Repair':'claimed',
+        'Motor Repair':'claimed',
+        'Solar Pump Maintenance':'claimed'
+      },
+      stats:{completedJobs:24, avgRating:4.7, avgDuration:'2.8 hrs', jobsThisMonth:8, monthlyEarnings:18500, learningProgress:35, proofOfWork:18},
+      onboarded:false
+    },
+    customer:{ name:'Ravi Agricultural Services', location:'Demo Rural Block', verified:true },
+    job:{
+      title:'Solar Pump Repair',
+      location:'Demo Rural Block',
+      distance:4.2,
+      duration:'2–3 hours',
+      skillsRequired:['Pump Repair','Electrical Wiring'],
+      priceMin:700, priceMax:1100, agreedPrice:900,
+      posted:true,
+      stage:0, // 0 open,1 accepted,2 trust-reviewed,3 started,4 checked-in,5 live,6 completed,7 customer-confirmed,8 paid,9 proof,10 passport-updated
+    },
+    mission:{
+      name:'Rural Water-Pump Inspection Drive',
+      location:'Demo Rural Block',
+      households:120,
+      workersRequired:12,
+      workersAssigned:8,
+      tasksDone:46,
+      status:'IN PROGRESS',
+      team:[
+        {name:'Arun Kumar', skill:'Pump Repair', rating:4.7, status:'Assessed'},
+        {name:'Priya', skill:'Electrical Maintenance', rating:4.5, status:'Verified'},
+        {name:'Suresh', skill:'Motor Repair', rating:4.3, status:'Claimed'},
+        {name:'Karthik', skill:'Solar Technician', rating:4.6, status:'Verified'},
+      ]
+    },
+    learning:{ progress:35, modulesDone:2, modulesTotal:5 },
+    assessment:{ done:false, score:null },
+    notifications:[
+      {t:'New opportunity signal: Solar Pump Maintenance demand rising nearby', time:'2h ago'},
+      {t:'Payment of ₹1,200 received for Fan Installation job', time:'1d ago'},
+      {t:'Mission "Water-Pump Inspection Drive" needs 4 more workers', time:'2d ago'},
+    ],
+    audit:[
+      {t:'Worker Arun Kumar completed voice onboarding', time:'09:02'},
+      {t:'Skill "Pump Repair" moved CLAIMED → ASSESSED', time:'09:14'},
+      {t:'Customer Ravi Agricultural Services posted job "Solar Pump Repair"', time:'10:03'},
+      {t:'System flagged TrustShield review: first-time customer', time:'10:04'},
+    ]
+  };
+}
+
+const state = {
+  screen:'landing',       // landing | demoSelect | worker | customer | mission | admin
+  modal:null,             // current open modal name
+  data: freshData(),
+  guidedOpen:false,
+  guidedStep:0,
+};
+
+function fmtINR(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+function toast(msg){
+  const root = document.getElementById('toast-root');
+  const el = document.createElement('div');
+  el.className='toast';
+  el.innerHTML = msg;
+  root.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, 2400);
+}
+
+/* ---------------------------- App controller ---------------------------- */
+const app = {
+
+  goto(screen){ state.screen=screen; state.modal=null; render(); window.scrollTo({top:0}); },
+  open(modal){ state.modal=modal; render(); },
+  close(){ state.modal=null; render(); },
+
+  enterDemo(role){
+    state.screen = role;
+    state.modal = null;
+    render();
+    window.scrollTo({top:0});
+  },
+
+  resetDemo(){
+    state.data = freshData();
+    state.modal = null;
+    toast('🔄 Demo reset — replay the journey any time.');
+    render();
+  },
+
+  toggleTheme(){
+    const root = document.documentElement;
+    const cur = root.getAttribute('data-theme');
+    if(cur==='dark'){ root.setAttribute('data-theme','light'); }
+    else if(cur==='light'){ root.removeAttribute('data-theme'); }
+    else { root.setAttribute('data-theme','dark'); }
+  },
+
+  /* ---- voice onboarding ---- */
+  voiceState:'idle', // idle -> transcribed -> extracted -> confirmed
+  useDemoVoice(){
+    app.voiceState='transcribed';
+    render();
+    setTimeout(()=>{ app.voiceState='extracted'; render(); }, 900);
+  },
+  confirmExtraction(){
+    state.data.worker.onboarded = true;
+    app.voiceState='confirmed';
+    state.data.audit.unshift({t:'Worker confirmed AI skill extraction (Electrical Wiring, Pump Repair)', time:'now'});
+    toast('✓ Skills confirmed — SkillGraph updated');
+    render();
+  },
+
+  /* ---- assessment ---- */
+  mcqAnswers:{},
+  pickMcq(qIdx, optIdx){
+    app.mcqAnswers[qIdx]=optIdx;
+    render();
+  },
+  submitAssessment(){
+    const correct=[1,2,0,3,1];
+    let score=0;
+    correct.forEach((c,i)=>{ if(app.mcqAnswers[i]===c) score++; });
+    if(score < 3) score = 4; // keep demo deterministic/positive
+    state.data.assessment.done = true;
+    state.data.assessment.score = score;
+    state.data.worker.skills['Pump Repair']='assessed';
+    state.data.audit.unshift({t:'Skill "Pump Repair" moved CLAIMED → ASSESSED (score '+score+'/5)', time:'now'});
+    toast('✓ Assessment complete — Pump Repair is now ASSESSED');
+    render();
+  },
+  retakeAssessment(){ app.mcqAnswers={}; state.data.assessment.done=false; render(); },
+
+  /* ---- job lifecycle ---- */
+  advanceJob(){
+    const j = state.data.job;
+    if(j.stage < 10) j.stage++;
+    const notes = {
+      1:'Job accepted by Arun Kumar', 2:'TrustShield review completed',
+      3:'Job started', 4:'Worker checked in on-site', 5:'Live status shared with customer',
+      6:'Job marked complete by worker', 7:'Customer confirmed completion',
+      8:'Payment of '+fmtINR(j.agreedPrice)+' settled (sandbox)', 9:'Proof of Work record generated',
+      10:'Passport updated — Pump Repair ASSESSED → VERIFIED'
+    };
+    if(notes[j.stage]) state.data.audit.unshift({t:notes[j.stage], time:'now'});
+    if(j.stage===9){
+      state.data.worker.skills['Pump Repair']='verified';
+      state.data.worker.stats.proofOfWork++;
+    }
+    if(j.stage===10){
+      state.data.worker.stats.completedJobs++;
+      state.data.worker.stats.monthlyEarnings += j.agreedPrice;
+    }
+    render();
+  },
+  resetJobStage(){ state.data.job.stage=0; render(); },
+
+  /* ---- learning ---- */
+  advanceLearning(){
+    const l = state.data.learning;
+    if(l.modulesDone < l.modulesTotal){ l.modulesDone++; l.progress = Math.round(l.modulesDone/l.modulesTotal*100); }
+    state.data.worker.stats.learningProgress = l.progress;
+    if(l.modulesDone===l.modulesTotal) toast('🎓 Learning complete — skill readiness improved');
+    render();
+  },
+
+  /* ---- mission ---- */
+  assignWorker(){
+    const m = state.data.mission;
+    if(m.workersAssigned < m.workersRequired){ m.workersAssigned++; m.tasksDone = Math.min(m.households, m.tasksDone+6); }
+    render();
+  },
+
+  /* ---- guided demo ---- */
+  openGuided(){ state.guidedOpen=true; render(); },
+  closeGuided(){ state.guidedOpen=false; render(); },
+  guidedGo(i){
+    state.guidedStep=i;
+    const steps = GUIDED_STEPS;
+    steps[i].action();
+    render();
+  },
+};
+
+/* Guided demo script -> 13 steps from the brief */
+const GUIDED_STEPS = [
+  {label:'Meet Arun', action:()=>{ state.screen='worker'; state.modal=null; }},
+  {label:'Discover his skills', action:()=>{ state.screen='worker'; state.modal='voice'; app.voiceState='idle'; }},
+  {label:'Build his AI Passport', action:()=>{ state.screen='worker'; state.modal='passport'; }},
+  {label:'Verify Pump Repair', action:()=>{ state.screen='worker'; state.modal='assessment'; }},
+  {label:'Detect Solar Pump opportunity', action:()=>{ state.screen='worker'; state.modal='radar'; }},
+  {label:'Match a job', action:()=>{ state.screen='worker'; state.modal='job'; }},
+  {label:'Calculate FairPay', action:()=>{ state.screen='worker'; state.modal='job'; state.jobTab='fairpay'; }},
+  {label:'Review TrustShield', action:()=>{ state.screen='worker'; state.modal='job'; state.jobTab='trust'; if(state.data.job.stage<1) state.data.job.stage=1; }},
+  {label:'Complete the job', action:()=>{ state.screen='worker'; state.modal='job'; state.jobTab='lifecycle'; state.data.job.stage=6; }},
+  {label:'Generate Proof of Work', action:()=>{ state.data.job.stage=9; state.screen='worker'; state.modal='job'; state.jobTab='lifecycle'; }},
+  {label:'Recommend learning', action:()=>{ state.screen='worker'; state.modal='mobility'; }},
+  {label:'Unlock better opportunity', action:()=>{ state.screen='worker'; state.modal='mobility'; }},
+  {label:'Show Mission Mode', action:()=>{ state.screen='mission'; state.modal=null; }},
+];
+
+/* ============================== RENDERING =============================== */
+
+function render(){
+  const root = document.getElementById('app');
+  let html = '';
+  if(state.screen==='landing') html = viewLanding();
+  else if(state.screen==='demoSelect') html = viewDemoSelect();
+  else html = viewShell();
+  root.innerHTML = html;
+
+  if(state.modal){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = modalHTML(state.modal);
+    root.appendChild(wrap.firstElementChild);
+  }
+  if(state.guidedOpen){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = guidedPanelHTML();
+    root.appendChild(wrap.firstElementChild);
+  }
+  if(state.screen==='admin'){
+    setTimeout(initAdminCharts, 20);
+  }
+}
+
+/* ---------------------------- Landing page ---------------------------- */
+function viewLanding(){
+  return `
+  <div class="fade-in">
+    <div class="topbar"><div class="wrap topbar-inner">
+      <div class="brand"><div class="mark">W</div> Workplace AI</div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn btn-ghost" onclick="app.toggleTheme()" title="Toggle theme">◐</button>
+        <button class="btn btn-outline btn-sm" onclick="app.goto('demoSelect')">🎮 Try Demo</button>
+      </div>
+    </div></div>
+
+    <div class="wrap" style="padding-top:56px; padding-bottom:40px;">
+      <div class="eyebrow">Livelihood Intelligence &amp; Trust Network</div>
+      <h1 class="display" style="font-size:clamp(32px,6vw,58px); font-weight:600; line-height:1.05; margin:18px 0 16px; max-width:820px;">
+        Turn skills into trusted opportunities.
+      </h1>
+      <p style="font-size:18px; color:var(--ink-soft); max-width:560px; line-height:1.55;">
+        Discover skills, verify experience, find local work, stay safer, prove your work, and grow your income — one connected system for informal and underserved workers.
+      </p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:28px;">
+        <button class="btn btn-primary" onclick="app.goto('demoSelect')">🎮 Try Demo</button>
+        <button class="btn btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">⚡ See how it works</button>
+        <button class="btn btn-outline" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">🚀 Explore platform</button>
+      </div>
+    </div>
+
+    <div class="wrap" id="how" style="padding:20px 20px 8px;">
+      <div class="card card-pad">
+        <div class="section-title" style="margin-bottom:14px;">How it connects</div>
+        <div class="scrollx" style="display:flex; align-items:center; gap:0; padding-bottom:6px;">
+          ${['Voice','SkillGraph','AI Passport','Opportunity Radar','AI Match','FairPay','TrustShield','Safe Work','Proof of Work','Learning','Income Mobility'].map((s,i,arr)=>`
+            <div style="display:flex; align-items:center; flex:none;">
+              <div style="text-align:center; width:118px;">
+                <div style="width:40px;height:40px;border-radius:12px;background:var(--teal-100); color:var(--teal-800); display:flex; align-items:center; justify-content:center; font-weight:700; margin:0 auto 8px; font-family:'Fraunces',serif;">${i+1}</div>
+                <div style="font-size:12.5px; font-weight:600;">${s}</div>
+              </div>
+              ${i<arr.length-1 ? '<div style="width:22px;height:2px;background:var(--border); flex:none;"></div>' : ''}
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap" id="modules" style="padding:36px 20px 60px;">
+      <div class="section-title" style="margin-bottom:14px;">Ten connected modules</div>
+      <div class="grid-auto">
+        ${[
+          ['SkillGraph','Interactive map of verified, assessed and claimed skills.'],
+          ['Workplace AI Passport','A portable, evidence-backed record of who a worker is and what they can do.'],
+          ['Opportunity Radar','Local demand signals before a job is even posted.'],
+          ['AI Job Matching','Explainable matches — never a black-box score alone.'],
+          ['FairPay','Transparent, factor-based price guidance for both sides.'],
+          ['TrustShield','Plain-language safety and fraud-risk guidance, never an auto-reject.'],
+          ['Work &amp; Proof','A visible job lifecycle ending in verifiable proof of work.'],
+          ['Income Mobility','Shows exactly which skill gap stands between a worker and the next tier of work.'],
+          ['Learning','Short, targeted micro-courses tied to a real opportunity.'],
+          ['Mission Mode','Coordinates whole crews against community-scale demand.'],
+        ].map(([t,d])=>`
+          <div class="card card-pad">
+            <div style="font-weight:700; margin-bottom:6px;">${t}</div>
+            <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.5;">${d}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border); padding:22px 20px; text-align:center; font-size:13px; color:var(--ink-faint);">
+      Workplace AI · Created by <strong style="color:var(--ink-soft);">LOKESH B</strong> · Prototype for demonstration purposes
+    </div>
+  </div>`;
+}
+
+/* ---------------------------- Demo role select ---------------------------- */
+function viewDemoSelect(){
+  const roles = [
+    {id:'worker', icon:'👷', title:'Worker Demo', desc:'Experience the complete skill-to-income journey as Arun Kumar.'},
+    {id:'customer', icon:'🏠', title:'Customer Demo', desc:'Create and manage a service request as Ravi Agricultural Services.'},
+    {id:'mission', icon:'🏢', title:'Mission Demo', desc:'Coordinate a local workforce mission as a Community Development Initiative.'},
+    {id:'admin', icon:'🛡', title:'Admin Demo', desc:'Monitor the whole Workplace AI network.'},
+  ];
+  return `
+  <div class="fade-in">
+    <div class="topbar"><div class="wrap topbar-inner">
+      <div class="brand" style="cursor:pointer" onclick="app.goto('landing')"><div class="mark">W</div> Workplace AI</div>
+      <button class="btn btn-ghost" onclick="app.goto('landing')">← Back</button>
+    </div></div>
+    <div class="wrap" style="padding:40px 20px 60px; max-width:900px;">
+      <div class="eyebrow">🎮 Demo Access</div>
+      <h1 class="display" style="font-size:clamp(26px,4vw,36px); font-weight:600; margin:14px 0 6px;">Choose a demo role</h1>
+      <p style="color:var(--ink-soft); margin-bottom:28px;">No sign-up needed — every role opens straight into a fully seeded dashboard.</p>
+      <div class="grid-auto">
+        ${roles.map(r=>`
+          <div class="card card-pad" style="display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:26px;">${r.icon}</div>
+            <div style="font-weight:700; font-size:16px;">${r.title}</div>
+            <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.5; flex:1;">${r.desc}</div>
+            <button class="btn btn-primary btn-block" onclick="app.enterDemo('${r.id}')">Enter Demo</button>
+          </div>`).join('')}
+      </div>
+      <div class="divider"></div>
+      <div class="card card-pad" style="font-size:13px; color:var(--ink-soft);">
+        <strong style="color:var(--ink);">Demo credentials (reference only):</strong><br>
+        worker@workplaceai.demo · customer@workplaceai.demo · mission@workplaceai.demo · admin@workplaceai.demo — password <span class="mono">Demo@123</span> for all.
+        <br><em>Demo environment — do not enter real personal information.</em>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------------------------- App shell (post-login) ---------------------------- */
+function viewShell(){
+  const roleLabels = {worker:'👷 Worker', customer:'🏠 Customer', mission:'🏢 Mission Coordinator', admin:'🛡 Admin'};
+  let body = '';
+  if(state.screen==='worker') body = viewWorker();
+  else if(state.screen==='customer') body = viewCustomer();
+  else if(state.screen==='mission') body = viewMission();
+  else if(state.screen==='admin') body = viewAdmin();
+
+  return `
+  <div class="demo-banner">🎮 DEMO MODE — using simulated data, not a live production account</div>
+  <div class="topbar"><div class="wrap topbar-inner">
+    <div class="brand" style="cursor:pointer" onclick="app.goto('landing')"><div class="mark">W</div> Workplace AI</div>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <span class="pill pill-info" style="display:none; sm:display:inline-flex;">${roleLabels[state.screen]||''}</span>
+      <button class="btn btn-ghost btn-sm" onclick="app.openGuided()">▶ Guided Demo</button>
+      <button class="btn btn-ghost btn-sm" onclick="app.resetDemo()">🔄 Reset</button>
+      <button class="btn btn-outline btn-sm" onclick="app.goto('demoSelect')">Switch role</button>
+    </div>
+  </div></div>
+  <div class="wrap" style="padding:20px 20px 60px;">
+    ${body}
+  </div>`;
+}
+
+/* ---------------------------- Worker dashboard ---------------------------- */
+function viewWorker(){
+  const w = state.data.worker;
+  const j = state.data.job;
+  const verifiedCount = Object.values(w.skills).filter(s=>s==='verified').length;
+  return `
+  <div class="fade-in">
+    <div class="card card-pad" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+      <div class="avatar">AK</div>
+      <div style="flex:1; min-width:200px;">
+        <div style="font-weight:700; font-size:18px;">${w.name}</div>
+        <div style="color:var(--ink-soft); font-size:13.5px;">${w.title} · ${w.language} · ${w.experience}</div>
+        <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+          <span class="pill pill-info">📍 ${w.location} · ${w.radius}km radius</span>
+          <span class="pill pill-verified">${w.availability}</span>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="app.open('passport')">🪪 View Passport</button>
+    </div>
+
+    <div class="grid-auto" style="margin-bottom:16px;">
+      <div class="kpi"><div class="num">${w.stats.completedJobs}</div><div style="font-size:12.5px; color:var(--ink-soft);">Completed jobs</div></div>
+      <div class="kpi"><div class="num">${w.stats.avgRating}★</div><div style="font-size:12.5px; color:var(--ink-soft);">Average rating</div></div>
+      <div class="kpi"><div class="num">${fmtINR(w.stats.monthlyEarnings)}</div><div style="font-size:12.5px; color:var(--ink-soft);">Est. this month</div></div>
+      <div class="kpi"><div class="num">${w.stats.proofOfWork}</div><div style="font-size:12.5px; color:var(--ink-soft);">Proof-of-work records</div></div>
+    </div>
+
+    ${!w.onboarded ? `
+    <div class="card card-pad" style="margin-bottom:16px; border-color:var(--gold-500); background:linear-gradient(180deg, var(--gold-100), var(--surface));">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:700;">🎙️ Tell Workplace AI about your work</div>
+          <div style="font-size:13.5px; color:var(--ink-soft); margin-top:2px;">Start with your voice — the AI extracts your skills automatically.</div>
+        </div>
+        <button class="btn btn-primary" onclick="app.open('voice')">Start voice profile</button>
+      </div>
+    </div>` : ''}
+
+    ${j.posted && j.stage===0 ? `
+    <div class="card card-pad" style="margin-bottom:16px; border-color:var(--teal-500);">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div class="pill pill-info" style="margin-bottom:6px;">🔎 New opportunity nearby</div>
+          <div style="font-weight:700;">${j.title} · ${j.distance}km away</div>
+          <div style="font-size:13px; color:var(--ink-soft);">Posted by ${state.data.customer.name}</div>
+        </div>
+        <button class="btn btn-primary" onclick="app.open('job')">Open opportunity</button>
+      </div>
+    </div>` : ''}
+
+    ${j.posted && j.stage>0 && j.stage<10 ? `
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:700;">${j.title} — in progress</div>
+          <div style="font-size:13px; color:var(--ink-soft);">Stage ${j.stage} of 10 · tap to continue the job lifecycle</div>
+        </div>
+        <button class="btn btn-outline" onclick="app.open('job')">Continue</button>
+      </div>
+    </div>` : ''}
+
+    ${j.stage===10 ? `
+    <div class="card card-pad" style="margin-bottom:16px; border-color:var(--teal-500); background:var(--teal-100);">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:700; color:var(--teal-900);">✓ Solar Pump Repair completed &amp; verified</div>
+          <div style="font-size:13px; color:var(--teal-800);">Pump Repair is now VERIFIED. See what this unlocks next.</div>
+        </div>
+        <button class="btn btn-primary" onclick="app.open('mobility')">📈 See next opportunity</button>
+      </div>
+    </div>` : ''}
+
+    <div class="grid-auto" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+      ${moduleCard('🧬','SkillGraph', verifiedCount+' of '+Object.keys(w.skills).length+' skills verified', ()=>"app.open('skillgraph')")}
+      ${moduleCard('🔎','Opportunity Radar','Solar Pump Maintenance demand rising', ()=>"app.open('radar')")}
+      ${moduleCard('📈','Income Mobility','One module away from the next tier', ()=>"app.open('mobility')")}
+      ${moduleCard('🎓','Learning', state.data.learning.progress+'% through Solar Pump Maintenance', ()=>"app.open('learning')")}
+      ${moduleCard('🚨','SOS &amp; Safety','Trusted contact + live job status', ()=>"app.open('sos')")}
+      ${moduleCard('🌾','Mission Mode','Water-Pump Inspection Drive — 8/12 workers', ()=>"app.goto('mission')")}
+    </div>
+  </div>`;
+}
+function moduleCard(icon,title,sub,onclick){
+  return `<div class="card card-pad" style="cursor:pointer;" onclick="${onclick()}">
+    <div style="font-size:22px; margin-bottom:8px;">${icon}</div>
+    <div style="font-weight:700; margin-bottom:2px;">${title}</div>
+    <div style="font-size:13px; color:var(--ink-soft);">${sub}</div>
+  </div>`;
+}
+
+/* ---------------------------- Customer dashboard ---------------------------- */
+function viewCustomer(){
+  const c = state.data.customer, j = state.data.job, w = state.data.worker;
+  return `
+  <div class="fade-in">
+    <div class="card card-pad" style="display:flex; gap:16px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+      <div class="avatar" style="background:linear-gradient(155deg,var(--sky-500),var(--teal-900));">RA</div>
+      <div style="flex:1; min-width:200px;">
+        <div style="font-weight:700; font-size:18px;">${c.name}</div>
+        <div style="color:var(--ink-soft); font-size:13.5px;">📍 ${c.location}</div>
+      </div>
+      <span class="pill pill-verified">✓ Verified demo account</span>
+    </div>
+
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="section-title" style="margin-bottom:10px;">Your job post</div>
+      <div style="font-weight:700; font-size:16px;">${j.title}</div>
+      <div style="font-size:13.5px; color:var(--ink-soft); margin:4px 0 10px;">${j.location} · ${j.duration} · requires ${j.skillsRequired.join(', ')}</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+        <span class="pill pill-info">Suggested range ${fmtINR(j.priceMin)}–${fmtINR(j.priceMax)}</span>
+        <span class="pill ${j.stage===0?'pill-claimed':j.stage<10?'pill-assessed':'pill-verified'}">${j.stage===0?'Awaiting a worker':j.stage<6?'In progress — stage '+j.stage+'/10':j.stage<10?'Worker completed — awaiting your steps':'Completed'}</span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title" style="margin-bottom:10px;">Recommended worker</div>
+      <div class="skillnode" style="cursor:default;">
+        <div class="avatar" style="width:40px;height:40px;font-size:14px;">AK</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;">${w.name} <span style="font-weight:400; color:var(--ink-soft); font-size:13px;">· ${w.stats.avgRating}★ · ${j.distance}km away</span></div>
+          <div style="font-size:12.5px; color:var(--ink-soft);">${w.title}</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="app.open('passport')">View passport</button>
+      </div>
+
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        ${j.stage===0 ? `<button class="btn btn-primary" onclick="toast('Waiting for Arun Kumar to accept the job — switch to the Worker demo to accept it.')">Awaiting acceptance</button>` : ''}
+        ${j.stage===6 ? `<button class="btn btn-primary" onclick="app.advanceJob(); toast('✓ Completion confirmed')">Confirm completion</button>` : ''}
+        ${j.stage>=7 ? `<button class="btn btn-outline" onclick="app.open('job')">View job &amp; payment</button>` : ''}
+      </div>
+    </div>
+
+    <div class="grid-auto">
+      ${moduleCard('💰','FairPay','See the pricing factors behind this job', ()=>"app.open('job')")}
+      ${moduleCard('🛡','TrustShield','Safety guidance before you commit', ()=>"app.open('job')")}
+    </div>
+  </div>`;
+}
+
+/* ---------------------------- Mission dashboard ---------------------------- */
+function viewMission(){
+  const m = state.data.mission;
+  const pct = Math.round(m.tasksDone/m.households*100);
+  return `
+  <div class="fade-in">
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="eyebrow">🌾 Mission Mode</div>
+      <h2 style="margin:10px 0 4px; font-size:22px;">${m.name}</h2>
+      <div style="color:var(--ink-soft); font-size:13.5px;">📍 ${m.location} · ${m.households} households · status <strong style="color:var(--gold-600);">${m.status}</strong></div>
+
+      <div style="margin-top:18px; display:flex; gap:24px; flex-wrap:wrap;">
+        <div><div class="num display" style="font-size:24px;">${m.workersAssigned}/${m.workersRequired}</div><div style="font-size:12px; color:var(--ink-soft);">Workers assigned</div></div>
+        <div><div class="num display" style="font-size:24px;">${m.tasksDone}/${m.households}</div><div style="font-size:12px; color:var(--ink-soft);">Tasks completed</div></div>
+        <div><div class="num display" style="font-size:24px;">${pct}%</div><div style="font-size:12px; color:var(--ink-soft);">Coverage</div></div>
+      </div>
+      <div class="progress-track" style="margin-top:14px;"><div class="progress-fill" style="width:${pct}%"></div></div>
+
+      <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="app.assignWorker()" ${m.workersAssigned>=m.workersRequired?'disabled':''}>+ Assign next available worker</button>
+        <button class="btn btn-outline btn-sm" onclick="app.open('missionReport')">Generate report</button>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="section-title" style="margin-bottom:10px;">Demo mission map</div>
+      <div class="map-wrap">
+        <div class="map-hub" style="top:44%; left:47%;">★</div>
+        <div class="map-dot" style="top:20%; left:22%;"></div>
+        <div class="map-dot" style="top:30%; left:70%;"></div>
+        <div class="map-dot" style="top:60%; left:18%;"></div>
+        <div class="map-dot" style="top:75%; left:64%;"></div>
+        <div class="map-dot" style="top:14%; left:55%;"></div>
+        <div class="map-dot" style="top:82%; left:38%;"></div>
+        <div class="map-worker" style="top:35%; left:35%;" title="Arun Kumar"></div>
+        <div class="map-worker" style="top:58%; left:62%;" title="Priya"></div>
+        <div style="position:absolute; bottom:10px; left:12px; font-size:11.5px; color:var(--ink-soft); background:var(--surface); padding:3px 9px; border-radius:99px; border:1px solid var(--border);">● household &nbsp; ● worker &nbsp; ★ mission hub</div>
+      </div>
+      <div style="font-size:11.5px; color:var(--ink-faint); margin-top:8px;">Demo mission map — simulated positions, not live GPS.</div>
+    </div>
+
+    <div class="card card-pad">
+      <div class="section-title" style="margin-bottom:10px;">Assigned workforce</div>
+      ${m.team.map(t=>`
+        <div class="skillnode" style="cursor:default; margin-bottom:8px;">
+          <div class="avatar" style="width:38px;height:38px;font-size:13px;">${t.name.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase()}</div>
+          <div style="flex:1;"><div style="font-weight:600;">${t.name}</div><div style="font-size:12.5px; color:var(--ink-soft);">${t.skill} · ${t.rating}★</div></div>
+          <span class="pill ${t.status==='Verified'?'pill-verified':t.status==='Assessed'?'pill-assessed':'pill-claimed'}">${t.status}</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ---------------------------- Admin dashboard ---------------------------- */
+function viewAdmin(){
+  return `
+  <div class="fade-in">
+    <div class="eyebrow" style="margin-bottom:12px;">🛡 Platform overview</div>
+    <div class="grid-auto" style="margin-bottom:16px;">
+      <div class="kpi"><div class="num">1,248</div><div style="font-size:12.5px; color:var(--ink-soft);">Registered workers</div></div>
+      <div class="kpi"><div class="num">312</div><div style="font-size:12.5px; color:var(--ink-soft);">Jobs this month</div></div>
+      <div class="kpi"><div class="num">687</div><div style="font-size:12.5px; color:var(--ink-soft);">Verified skills</div></div>
+      <div class="kpi"><div class="num">9</div><div style="font-size:12.5px; color:var(--ink-soft);">Active missions</div></div>
+      <div class="kpi"><div class="num">3</div><div style="font-size:12.5px; color:var(--ink-soft);">Open safety alerts</div></div>
+      <div class="kpi"><div class="num">${fmtINR(482300)}</div><div style="font-size:12.5px; color:var(--ink-soft);">Payment volume (sandbox)</div></div>
+      <div class="kpi"><div class="num">214</div><div style="font-size:12.5px; color:var(--ink-soft);">Learning sessions</div></div>
+      <div class="kpi"><div class="num">41</div><div style="font-size:12.5px; color:var(--ink-soft);">Verification queue</div></div>
+    </div>
+
+    <div class="grid-auto" style="grid-template-columns:1.4fr 1fr; margin-bottom:16px;">
+      <div class="card card-pad">
+        <div class="section-title" style="margin-bottom:10px;">Jobs per week (demo data)</div>
+        <canvas id="chartJobs" height="140"></canvas>
+      </div>
+      <div class="card card-pad">
+        <div class="section-title" style="margin-bottom:10px;">Skill verification status</div>
+        <canvas id="chartSkills" height="140"></canvas>
+      </div>
+    </div>
+
+    <div class="card card-pad">
+      <div class="section-title" style="margin-bottom:10px;">Audit log</div>
+      ${state.data.audit.slice(0,8).map(a=>`
+        <div style="display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--border); font-size:13.5px;">
+          <span>${a.t}</span><span class="mono" style="color:var(--ink-faint); font-size:11.5px; flex:none;">${a.time}</span>
+        </div>`).join('')}
+    </div>
+  </div>
+  `;
+}
+let chartJobsRef=null, chartSkillsRef=null;
+function initAdminCharts(){
+  const c1 = document.getElementById('chartJobs');
+  const c2 = document.getElementById('chartSkills');
+  if(!c1||!c2||typeof Chart==='undefined') return;
+  if(chartJobsRef) chartJobsRef.destroy();
+  if(chartSkillsRef) chartSkillsRef.destroy();
+  const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border');
+  const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft');
+  chartJobsRef = new Chart(c1, {
+    type:'bar',
+    data:{ labels:['W1','W2','W3','W4','W5','W6'], datasets:[{ data:[38,45,41,52,60,58], backgroundColor:'#218774', borderRadius:6 }]},
+    options:{ plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}, ticks:{color:ink}}, y:{grid:{color:gridColor}, ticks:{color:ink}} } }
+  });
+  chartSkillsRef = new Chart(c2, {
+    type:'doughnut',
+    data:{ labels:['Verified','Assessed','Claimed'], datasets:[{ data:[687,214,140], backgroundColor:['#218774','#C79A34','#B8C0BA'] }]},
+    options:{ plugins:{legend:{position:'bottom', labels:{color:ink, boxWidth:10, font:{size:11}}}} }
+  });
+}
+
+/* ---------------------------- Guided demo side panel ---------------------------- */
+function guidedPanelHTML(){
+  return `
+  <div style="position:fixed; top:0; right:0; height:100%; width:min(340px,88vw); background:var(--surface); border-left:1px solid var(--border); z-index:90; box-shadow:var(--shadow-2); display:flex; flex-direction:column; padding-top:env(safe-area-inset-top,0px);">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 18px; border-bottom:1px solid var(--border);">
+      <div style="font-weight:700;">▶ Guided demo</div>
+      <button class="btn btn-ghost btn-sm" onclick="app.closeGuided()">✕</button>
+    </div>
+    <div style="overflow-y:auto; padding:12px 14px; flex:1;">
+      ${GUIDED_STEPS.map((s,i)=>`
+        <div style="display:flex; align-items:center; gap:10px; padding:9px 6px; border-radius:10px; ${i===state.guidedStep?'background:var(--teal-100);':''}">
+          <div style="width:22px;height:22px;border-radius:50%; background:${i<=state.guidedStep?'var(--teal-700)':'var(--surface-2)'}; color:${i<=state.guidedStep?'#fff':'var(--ink-faint)'}; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none;">${i+1}</div>
+          <div style="flex:1; font-size:13.5px;">${s.label}</div>
+          <button class="btn btn-outline btn-sm" onclick="app.guidedGo(${i})">Go</button>
+        </div>`).join('')}
+    </div>
+    <div style="padding:12px 14px; border-top:1px solid var(--border);">
+      <button class="btn btn-outline btn-block btn-sm" onclick="app.closeGuided()">Skip / close</button>
+    </div>
+  </div>`;
+}
+
+/* ================================ MODALS ================================ */
+function modalHead(title){
+  return `<div class="modal-head"><div style="font-weight:700; font-size:16px;">${title}</div><button class="btn btn-ghost btn-sm" onclick="app.close()">✕</button></div>`;
+}
+
+function modalHTML(name){
+  const map = {
+    voice: modalVoice, skillgraph: modalSkillgraph, assessment: modalAssessment,
+    passport: modalPassport, radar: modalRadar, job: modalJob, mobility: modalMobility,
+    learning: modalLearning, sos: modalSOS, missionReport: modalMissionReport,
+  };
+  const inner = (map[name]||(()=>'<div class="modal-head"></div>'))();
+  return `<div class="modal-backdrop" onclick="if(event.target===this) app.close()"><div class="modal-panel">${inner}</div></div>`;
+}
+
+/* ---- Voice onboarding modal ---- */
+function modalVoice(){
+  const vs = app.voiceState;
+  return `
+  ${modalHead('🎙️ Voice profile')}
+  <div class="card-pad">
+    ${vs==='idle' ? `
+      <p style="color:var(--ink-soft); font-size:14px;">Tap the mic (or use the demo voice sample) to tell Workplace AI about your work.</p>
+      <div class="card card-pad" style="text-align:center; margin:18px 0;">
+        <div style="font-size:34px; margin-bottom:10px;">🎙️</div>
+        <div class="btn btn-outline btn-sm" style="margin-bottom:6px;">Microphone unavailable in this preview</div>
+        <div><button class="btn btn-primary" onclick="app.useDemoVoice()">Use demo voice</button></div>
+      </div>` : ''}
+    ${vs==='transcribed' || vs==='extracted' || vs==='confirmed' ? `
+      <div class="section-title" style="margin-bottom:6px;">Transcript</div>
+      <div class="card card-pad" style="font-style:italic; margin-bottom:16px;">“Enakku electrical wiring and pump repair theriyum. 5 years experience irukku.”</div>` : ''}
+    ${vs==='extracted' || vs==='confirmed' ? `
+      <div class="section-title" style="margin-bottom:8px;">AI skill extraction</div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+        <div class="skillnode" style="cursor:default;"><span class="dot dot-verified"></span> Electrical Wiring</div>
+        <div class="skillnode" style="cursor:default;"><span class="dot dot-assessed"></span> Pump Repair</div>
+        <div class="skillnode" style="cursor:default;">🗣 Language: <strong>Tamil</strong></div>
+        <div class="skillnode" style="cursor:default;">⏱ Experience: <strong>5 years</strong></div>
+      </div>
+      ${vs==='extracted' ? `
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary btn-block" onclick="app.confirmExtraction()">Confirm</button>
+        <button class="btn btn-outline" onclick="app.close()">Edit later</button>
+      </div>` : `<div class="pill pill-verified">✓ Confirmed and saved to SkillGraph</div>`}
+    ` : ''}
+  </div>`;
+}
+
+/* ---- SkillGraph modal ---- */
+function modalSkillgraph(){
+  const w = state.data.worker;
+  return `
+  ${modalHead('🧬 SkillGraph')}
+  <div class="card-pad">
+    <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:14px;">Tap a skill to see its evidence and status.</p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      ${Object.entries(w.skills).map(([name,status])=>`
+        <div class="skillnode" onclick="app.close(); setTimeout(()=>{state.modal='skillDetail'; state.skillFocus='${name}'; render();},60)">
+          <span class="dot dot-${status}"></span>
+          <div style="flex:1;">
+            <div style="font-weight:600;">${name}</div>
+            <div style="font-size:12px; color:var(--ink-soft);">${status==='verified'?'Confirmed by a completed, customer-confirmed job':status==='assessed'?'Passed a skill assessment — awaiting a verified job':'Self-claimed — not yet assessed'}</div>
+          </div>
+          <span class="pill pill-${status}">${status}</span>
+        </div>`).join('')}
+    </div>
+    <div class="divider"></div>
+    <button class="btn btn-outline btn-block" onclick="app.close(); app.open('assessment')">Take the Pump Repair assessment →</button>
+  </div>`;
+}
+
+/* ---- Assessment modal ---- */
+const MCQ = [
+  {q:'What should be checked before servicing an electrical pump?', opts:['Paint colour of housing','Power is isolated and locked out','Nearby weather forecast','Brand of the motor']},
+  {q:'A pump runs but delivers no water. Most likely first check?', opts:['Replace the whole pump','Repaint the casing','Check for a blocked or clogged intake','Increase pipe length']},
+  {q:'Correct order when replacing a pump seal?', opts:['Drain, disassemble, replace seal, reassemble, test','Test, drain, replace seal','Replace seal while running','Disassemble without draining']},
+  {q:'A customer smells burning near the motor. You should:', opts:['Ignore it, motors get warm','Add more oil immediately','Stop, isolate power, inspect for damage','Increase load to test']},
+  {q:'Best practice for documenting a completed pump repair?', opts:['Skip documentation to save time','Only tell the customer verbally','Note parts replaced and test results, get customer sign-off','Estimate what was probably done']}
+];
+function modalAssessment(){
+  const a = state.data.assessment;
+  if(a.done){
+    return `
+    ${modalHead('✅ Pump Repair assessment')}
+    <div class="card-pad" style="text-align:center;">
+      <div style="font-size:40px; margin:10px 0;">✅</div>
+      <div style="font-weight:700; font-size:18px;">Assessment complete</div>
+      <div style="color:var(--ink-soft); margin:6px 0 16px;">Score: <strong>${a.score}/5</strong></div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:18px;">
+        <span class="pill pill-claimed">CLAIMED</span> → <span class="pill pill-assessed">ASSESSED</span>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="app.close(); app.open('passport')">View updated passport</button>
+      <button class="btn btn-ghost btn-block" onclick="app.retakeAssessment()">Retake</button>
+    </div>`;
+  }
+  return `
+  ${modalHead('📝 Pump Repair assessment')}
+  <div class="card-pad">
+    <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">5 questions · multiple choice</p>
+    ${MCQ.map((m,qi)=>`
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600; font-size:14px; margin-bottom:8px;">${qi+1}. ${m.q}</div>
+        ${m.opts.map((o,oi)=>`
+          <div class="mcq-opt ${app.mcqAnswers[qi]===oi?'picked':''}" onclick="app.pickMcq(${qi},${oi})">
+            <input type="radio" ${app.mcqAnswers[qi]===oi?'checked':''} readonly>
+            <span style="font-size:13.5px;">${o}</span>
+          </div>`).join('')}
+      </div>`).join('')}
+    <button class="btn btn-primary btn-block" ${Object.keys(app.mcqAnswers).length<5?'disabled':''} onclick="app.submitAssessment()">Submit assessment</button>
+  </div>`;
+}
+
+/* ---- Passport modal ---- */
+function modalPassport(){
+  const w = state.data.worker;
+  const grp = (status)=>Object.entries(w.skills).filter(([,s])=>s===status).map(([n])=>n);
+  return `
+  ${modalHead('🪪 Workplace AI Passport')}
+  <div class="card-pad">
+    <div style="background:linear-gradient(155deg,var(--teal-900),var(--teal-700)); color:#EAF4F0; border-radius:16px; padding:22px;">
+      <div style="font-family:'Fraunces',serif; font-size:20px; font-weight:600;">${w.name}</div>
+      <div style="font-size:13px; opacity:.85; margin-top:2px;">${w.title}</div>
+      <div style="font-size:12.5px; opacity:.75; margin-top:6px;">${w.language} · ${w.experience} experience</div>
+      <div style="height:1px; background:rgba(255,255,255,.2); margin:16px 0;"></div>
+
+      <div style="font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.7; margin-bottom:6px;">Verified skills</div>
+      <div style="margin-bottom:12px;">${grp('verified').map(s=>`<div>✓ ${s}</div>`).join('') || '<div style="opacity:.6;">None yet</div>'}</div>
+
+      <div style="font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.7; margin-bottom:6px;">Assessed</div>
+      <div style="margin-bottom:12px;">${grp('assessed').map(s=>`<div>◐ ${s}</div>`).join('') || '<div style="opacity:.6;">None yet</div>'}</div>
+
+      <div style="font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.7; margin-bottom:6px;">Claimed</div>
+      <div>${grp('claimed').map(s=>`<div>○ ${s}</div>`).join('') || '<div style="opacity:.6;">None</div>'}</div>
+
+      <div style="height:1px; background:rgba(255,255,255,.2); margin:16px 0;"></div>
+      <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+        <span>Proof of work: <strong>${w.stats.proofOfWork}</strong></span>
+        <span>Jobs: <strong>${w.stats.completedJobs}</strong></span>
+        <span>Rating: <strong>${w.stats.avgRating}</strong></span>
+      </div>
+    </div>
+    <p style="font-size:12px; color:var(--ink-faint); margin-top:12px;">Digital proof-of-work identity — not a government certificate.</p>
+  </div>`;
+}
+
+/* ---- Opportunity Radar modal ---- */
+function modalRadar(){
+  return `
+  ${modalHead('🔎 Opportunity Radar')}
+  <div class="card-pad">
+    <div class="pill pill-info" style="margin-bottom:10px;">🟣 Emerging demand</div>
+    <div style="font-weight:700; font-size:17px; margin-bottom:10px;">Solar Pump Maintenance</div>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+      <div>↑ Recent local requests</div>
+      <div>↑ Seasonal agricultural activity</div>
+      <div>↑ Limited verified technicians nearby</div>
+      <div>↑ Your availability matches the pattern</div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:14px;">
+      <span class="pill pill-assessed">Skill shortage: Moderate</span>
+    </div>
+    <div class="card card-pad" style="background:var(--surface-2);">
+      <div style="font-size:12.5px; font-weight:700; margin-bottom:4px;">Recommended preparation</div>
+      <div style="font-size:13.5px;">Complete the Solar Pump Maintenance micro-course.</div>
+    </div>
+    <p style="font-size:11.5px; color:var(--ink-faint); margin-top:12px;">Opportunity signal based on demo data — not a guaranteed job.</p>
+    <button class="btn btn-primary btn-block" style="margin-top:6px;" onclick="app.close(); app.open('learning')">Start micro-course</button>
+  </div>`;
+}
+
+/* ---- Job / lifecycle modal (matching, fairpay, trustshield, lifecycle) ---- */
+function modalJob(){
+  const j = state.data.job, w = state.data.worker;
+  const tab = state.jobTab || 'match';
+  const tabs = [['match','AI Match'],['fairpay','FairPay'],['trust','TrustShield'],['lifecycle','Lifecycle']];
+  const stageLabels = ['Open','Accepted','TrustShield','Started','Checked in','Live status','Completed','Customer confirmed','Paid','Proof generated','Passport updated'];
+  return `
+  ${modalHead('💼 '+j.title)}
+  <div class="card-pad">
+    <div class="tabbar" style="margin-bottom:16px;">
+      ${tabs.map(([id,label])=>`<button class="tab ${tab===id?'active':''}" onclick="state.jobTab='${id}'; render();">${label}</button>`).join('')}
+    </div>
+
+    ${tab==='match' ? `
+      <div style="font-weight:700; margin-bottom:10px;">🤖 Why you're matched</div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+        <div>✓ Pump Repair — ${w.skills['Pump Repair']}</div>
+        <div>✓ Electrical Wiring — ${w.skills['Electrical Wiring']}</div>
+        <div>✓ ${w.experience} experience</div>
+        <div>✓ ${j.distance}km away, within your ${w.radius}km radius</div>
+        <div>✓ Marked available now</div>
+        <div>✓ Similar work completed before</div>
+      </div>
+      <div class="pill pill-info">Match confidence: high (explanation above is the primary signal)</div>
+    ` : ''}
+
+    ${tab==='fairpay' ? `
+      <div style="font-weight:700; margin-bottom:10px;">💰 FairPay</div>
+      <div style="font-size:22px; font-family:'Fraunces',serif; margin-bottom:4px;">${fmtINR(j.priceMin)} – ${fmtINR(j.priceMax)}</div>
+      <div class="pill pill-info" style="margin-bottom:14px;">Suggested reference range</div>
+      <div class="section-title" style="margin-bottom:8px;">Factors considered</div>
+      <div style="display:flex; flex-direction:column; gap:6px; font-size:13.5px;">
+        <div>• Job type: pump repair</div>
+        <div>• Distance: ${j.distance}km</div>
+        <div>• Estimated duration: ${j.duration}</div>
+        <div>• Skill level required: assessed/verified</div>
+        <div>• Local demand: rising</div>
+        <div>• Historical similar demo jobs</div>
+      </div>
+    ` : ''}
+
+    ${tab==='trust' ? `
+      <div style="font-weight:700; margin-bottom:10px;">🛡 TrustShield</div>
+      <div class="pill pill-warn" style="margin-bottom:14px;">🟡 Review recommended</div>
+      <div class="section-title" style="margin-bottom:8px;">Reasons</div>
+      <div style="display:flex; flex-direction:column; gap:6px; font-size:13.5px; margin-bottom:14px;">
+        <div>• First-time customer</div>
+        <div>• Limited transaction history</div>
+        <div>• Appointment outside usual hours</div>
+        <div>• Job is outside your previous service pattern</div>
+      </div>
+      <div class="section-title" style="margin-bottom:8px;">Recommended actions</div>
+      <div style="display:flex; flex-direction:column; gap:6px; font-size:13.5px;">
+        <div>✓ Confirm customer details</div>
+        <div>✓ Confirm payment terms</div>
+        <div>✓ Share job status with a trusted contact</div>
+        <div>✓ Use trusted-contact check-in</div>
+      </div>
+    ` : ''}
+
+    ${tab==='lifecycle' ? `
+      <div class="rail" style="margin-bottom:10px;">
+        ${stageLabels.map((_,i)=>`
+          <div class="rail-step ${i<j.stage?'done':i===j.stage?'active':''}">${i<j.stage?'✓':i+1}</div>
+          ${i<stageLabels.length-1?`<div class="rail-line ${i<j.stage?'done':''}"></div>`:''}`).join('')}
+      </div>
+      <div style="font-weight:700; margin-bottom:4px;">${stageLabels[j.stage]}</div>
+      <div style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">${lifecycleNote(j.stage)}</div>
+
+      ${j.stage===8 ? `
+        <div class="card card-pad" style="background:var(--surface-2); margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between;"><span>Job amount</span><strong>${fmtINR(j.agreedPrice)}</strong></div>
+          <div style="display:flex; justify-content:space-between; margin-top:6px;"><span>Status</span><span class="pill pill-verified">COMPLETED ✓ (sandbox)</span></div>
+          <div style="font-size:11px; color:var(--ink-faint); margin-top:8px;">DEMO PAYMENT — SANDBOX, no real funds moved.</div>
+        </div>` : ''}
+
+      ${j.stage===9 ? proofOfWorkBlock() : ''}
+      ${j.stage===10 ? `
+        <div class="pill pill-verified" style="margin-bottom:14px;">Pump Repair: ASSESSED → VERIFIED ✓</div>
+      ` : ''}
+
+      <div style="display:flex; gap:10px;">
+        ${j.stage<10 ? `<button class="btn btn-primary btn-block" onclick="app.advanceJob()">${nextStageButtonLabel(j.stage)}</button>` : `<button class="btn btn-primary btn-block" onclick="app.close(); app.open('mobility')">See next opportunity →</button>`}
+      </div>
+    ` : ''}
+  </div>`;
+}
+function lifecycleNote(stage){
+  const notes = ['Job is open for a worker to accept.','Worker has accepted the job.','TrustShield review completed before starting.','Worker is on the way / has started.','Worker has checked in on-site.','Live status is being shared with the customer.','Worker marked the job complete.','Customer confirmed the work was done.','Payment settled through the sandbox.','A verifiable proof-of-work record was generated.','Passport has been updated with the verified skill.'];
+  return notes[stage]||'';
+}
+function nextStageButtonLabel(stage){
+  const labels = ['Accept job','Run TrustShield review','Start job','Check in on-site','Share live status','Mark job complete','Simulate customer confirmation','Process payment (sandbox)','Generate proof of work','Update passport'];
+  return labels[stage];
+}
+function proofOfWorkBlock(){
+  const w = state.data.worker, j = state.data.job, c = state.data.customer;
+  return `
+  <div class="card card-pad" style="background:var(--teal-100); margin-bottom:14px;">
+    <div style="font-weight:700; color:var(--teal-900); margin-bottom:8px;">✓ Verified proof of work</div>
+    <div style="font-size:13px; display:flex; flex-direction:column; gap:4px; color:var(--teal-900);">
+      <div>Worker: <strong>${w.name}</strong></div>
+      <div>Job: <strong>${j.title}</strong></div>
+      <div>Customer: <strong>${c.name}</strong></div>
+      <div>Completed: <strong>22 Sep 2026</strong></div>
+      <div>Duration: <strong>2.5 hours</strong></div>
+      <div>Payment: <strong>${fmtINR(j.agreedPrice)}</strong></div>
+      <div>Customer confirmation: <strong>✓</strong></div>
+      <div>Skill applied: <strong>Pump Repair</strong></div>
+    </div>
+  </div>`;
+}
+
+/* ---- Income Mobility modal ---- */
+function modalMobility(){
+  const l = state.data.learning;
+  return `
+  ${modalHead('📈 Your next opportunity')}
+  <div class="card-pad">
+    <div style="font-weight:700; font-size:17px; margin-bottom:14px;">Solar Pump Maintenance</div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:13.5px; margin-bottom:16px;">
+      <div>Current skills → <strong>Pump Repair ✓ + Electrical Wiring ✓</strong></div>
+      <div>Skill gap → <strong>Solar Pump Maintenance</strong></div>
+      <div>Path → Micro-learning → Assessment → Verification → Higher-value opportunities</div>
+    </div>
+    <div class="card card-pad" style="background:var(--gold-100); margin-bottom:16px;">
+      <div style="font-size:13.5px;">You are one learning module and one assessment away from becoming eligible for this opportunity signal.</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px;"><span>Learning progress</span><span>${l.progress}%</span></div>
+    <div class="progress-track" style="margin-bottom:16px;"><div class="progress-fill" style="width:${l.progress}%"></div></div>
+    <button class="btn btn-primary btn-block" onclick="app.close(); app.open('learning')">Continue micro-learning</button>
+  </div>`;
+}
+
+/* ---- Learning modal ---- */
+const LEARNING_MODULES = ['Solar Pump Basics','Electrical Safety','Pump Diagnostics','Common Failures','Maintenance Checklist'];
+function modalLearning(){
+  const l = state.data.learning;
+  return `
+  ${modalHead('🎓 Solar Pump Maintenance')}
+  <div class="card-pad">
+    <div style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">12 minutes · 5 modules</div>
+    <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px;"><span>Progress</span><span>${l.progress}%</span></div>
+    <div class="progress-track" style="margin-bottom:16px;"><div class="progress-fill" style="width:${l.progress}%"></div></div>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+      ${LEARNING_MODULES.map((m,i)=>`
+        <div class="skillnode" style="cursor:default;">
+          <span class="dot ${i<l.modulesDone?'dot-verified':'dot-claimed'}"></span>
+          <div style="flex:1;">${m}</div>
+          ${i<l.modulesDone?'<span class="pill pill-verified">done</span>':''}
+        </div>`).join('')}
+    </div>
+    ${l.modulesDone<l.modulesTotal ?
+      `<button class="btn btn-primary btn-block" onclick="app.advanceLearning()">Start learning: ${LEARNING_MODULES[l.modulesDone]}</button>` :
+      `<div class="pill pill-verified" style="margin-bottom:10px;">Learning complete ✓ — skill readiness improved</div>
+       <button class="btn btn-outline btn-block" onclick="app.close(); app.open('skillgraph')">Back to SkillGraph</button>`}
+  </div>`;
+}
+
+/* ---- SOS modal ---- */
+let sosState = 'idle';
+function modalSOS(){
+  return `
+  ${modalHead('🚨 SOS & Safety')}
+  <div class="card-pad">
+    <div class="card card-pad" style="margin-bottom:14px;">
+      <div style="font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;">Trusted contact</div>
+      <div style="font-weight:600;">Meena Kumar (spouse) · +91 98••• •• 210</div>
+    </div>
+    <div class="card card-pad" style="margin-bottom:14px;">
+      <div style="font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;">Current job</div>
+      <div style="font-weight:600;">Solar Pump Repair · Demo Rural Block</div>
+    </div>
+    ${sosState==='idle' ? `<button class="btn btn-coral btn-block" onclick="sosState='activated'; render();">🚨 Activate demo SOS</button>` : `
+      <div class="pill pill-warn" style="margin-bottom:10px;">Demo SOS activated</div>
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:13.5px;">
+        <div>✓ Trusted contact notified</div>
+        <div>✓ Job status shared</div>
+        <div>✓ Location sharing simulated</div>
+      </div>
+      <button class="btn btn-outline btn-block" style="margin-top:14px;" onclick="sosState='idle'; render();">Reset</button>
+    `}
+    <p style="font-size:11px; color:var(--ink-faint); margin-top:14px;">Prototype simulation — not an emergency response service.</p>
+  </div>`;
+}
+
+/* ---- Mission report modal ---- */
+function modalMissionReport(){
+  const m = state.data.mission;
+  return `
+  ${modalHead('📋 Mission report')}
+  <div class="card-pad">
+    <div style="font-weight:700; margin-bottom:10px;">${m.name}</div>
+    <div style="display:flex; flex-direction:column; gap:6px; font-size:13.5px; margin-bottom:16px;">
+      <div>Households covered: <strong>${m.tasksDone}/${m.households}</strong></div>
+      <div>Workers assigned: <strong>${m.workersAssigned}/${m.workersRequired}</strong></div>
+      <div>Skill/tool gaps detected: <strong>Solar-panel cleaning kits short in 2 clusters</strong></div>
+      <div>Recommended next step: <strong>Assign 4 more verified electricians to the north cluster</strong></div>
+    </div>
+    <div class="pill pill-info">Demo report — generated from seeded mission data</div>
+  </div>`;
+}
+
+/* ---- Skill detail (secondary modal reused via skillgraph) ---- */
+const origModalHTML = modalHTML;
+modalHTML = function(name){
+  if(name==='skillDetail'){
+    const focus = state.skillFocus;
+    const status = state.data.worker.skills[focus];
+    return `<div class="modal-backdrop" onclick="if(event.target===this) app.close()"><div class="modal-panel">
+      ${modalHead('🧬 '+focus)}
+      <div class="card-pad">
+        <span class="pill pill-${status}" style="margin-bottom:14px;">${status}</span>
+        <div class="section-title" style="margin-bottom:8px;">Evidence</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13.5px; margin-bottom:16px;">
+          ${status==='verified' ? `<div>• Customer-confirmed job with proof of work</div><div>• 4.7★ average across related jobs</div>` : ''}
+          ${status==='assessed' ? `<div>• Passed skill assessment (4/5)</div><div>• Awaiting a verified job to upgrade status</div>` : ''}
+          ${status==='claimed' ? `<div>• Self-reported during voice onboarding</div><div>• No assessment or job evidence yet</div>` : ''}
+        </div>
+        ${status==='claimed' && focus==='Motor Repair' ? `<button class="btn btn-outline btn-block" onclick="app.close()">Assessment coming soon in this demo</button>` : ''}
+      </div>
+    </div></div>`;
+  }
+  return origModalHTML(name);
+};
+
+/* ================================ INIT ================================ */
+render();
+</script>
+</body>
+</html>
