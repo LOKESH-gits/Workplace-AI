@@ -1,24 +1,34 @@
 # 🌍 Workplace AI — Livelihood Intelligence & Trust Network
 
-**A digital platform concept for skills, livelihood opportunities, workplace trust, and fair-pay intelligence.**
+**A digital platform for skills, livelihood opportunities, workplace trust, and fair-pay intelligence.**
 
-## 🚀 Project Overview
+[🚀 Live Demo](https://workplace-ai.netlify.app/) · [📂 GitHub Repository](https://github.com/LOKESH-gits/Workplace-AI)
 
-Workplace AI explores how intelligent digital tools can help connect people's skills with livelihood opportunities while improving transparency, trust, and access to work.
+---
+
+## 🌐 Live Application
+
+**Explore Workplace AI:** https://workplace-ai.netlify.app/
+
+Experience the deployed Workplace AI prototype and explore its interface and available features.
+
+## 🎯 Project Overview
+
+Workplace AI explores how intelligent digital tools can connect people's skills with livelihood opportunities while improving transparency, trust, and access to work.
 
 ## ✨ Key Modules
 
-- **SkillGraph** — organizes skills and helps represent a person's capabilities.
-- **Opportunity Radar** — helps surface relevant livelihood and work opportunities.
-- **TrustShield** — focuses on trust, transparency, and safer interactions.
-- **FairPay** — supports fair-pay awareness and compensation transparency.
-- **Mission Mode** — organizes focused, goal-oriented work activities.
+- **SkillGraph** — represents skills and capabilities.
+- **Opportunity Radar** — supports livelihood opportunity discovery.
+- **TrustShield** — focuses on transparency and trust.
+- **FairPay** — explores fair-pay awareness and compensation transparency.
+- **Mission Mode** — organizes focused, goal-oriented activities.
 
-## 🧭 Intended Workflow
+## 🔄 Intended Workflow
 
 Skills and Profile → Opportunity Discovery → Trust and Pay Information → Work Engagement → Progress and Outcomes.
 
-## 🛠️ Technology
+## 🛠️ Technology Stack
 
 - HTML
 - CSS
@@ -26,23 +36,39 @@ Skills and Profile → Opportunity Discovery → Trust and Pay Information → W
 - Chart.js for data visualization
 - Google Fonts for typography
 
-The current project is provided as a single-page `index.html` application.
+## 📁 Project Structure
 
-## ▶️ Run Locally
+\`\`\`text
+Workplace-AI/
+├── index.html
+├── README.md
+└── .gitignore
+\`\`\`
 
-1. Download or clone this repository.
+## 🚀 Run Locally
+
+1. Clone or download this repository.
 2. Open `index.html` in a modern web browser.
-3. Ensure you have an internet connection for externally loaded fonts and Chart.js.
+3. Ensure internet access for externally loaded fonts and Chart.js.
 
-No Node.js installation is required for basic browser use of the standalone HTML file.
+## ☁️ Deployment
 
-## 🔐 Responsible Use
+### Live Demo
 
-This project is a prototype. Any real-world use involving employment, personal data, compensation, or trust assessments should include appropriate privacy safeguards, transparency, human oversight, and validation.
+🌐 **Website:** https://workplace-ai.netlify.app/
+
+The live website is hosted on Netlify. The GitHub repository contains the project's source code and documentation.
+
+## 🔐 Privacy and Responsible Use
+
+This project is a prototype. Real-world applications involving employment, personal data, compensation, or trust assessments should include appropriate privacy safeguards, transparency, human oversight, and validation.
 
 ## 👨‍💻 Author
 
 **LOKESH B**
+
+- GitHub: https://github.com/LOKESH-gits
+- Live Demo: https://workplace-ai.netlify.app/
 
 ---
 
