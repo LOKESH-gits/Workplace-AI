@@ -1,0 +1,36 @@
+name: Workplace AI Project Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate project files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check application file
+        run: test -s index.html
+
+      - name: Check HTML structure
+        run: |
+          grep -qi '<!DOCTYPE html>' index.html
+          grep -qi '<html' index.html
+          grep -qi '</html>' index.html
+
+      - name: Check README and live demo link
+        run: |
+          test -s README.md
+          grep -q 'https://workplace-ai.netlify.app/' README.md
+
+      - name: Success
+        run: echo "Workplace AI project checks passed."
